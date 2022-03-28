@@ -36,6 +36,7 @@ py.iplot(data, filename='jupyter-basic_bar')
 # (alternatively) instruction to view it in web app of plotly
 py.plot(data)
 
+
 # -- TEST 4 :
 # verify you can use plotly and visualize plots in web browser locally
 
