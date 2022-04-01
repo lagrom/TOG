@@ -38,7 +38,9 @@ py.plot(data)
 
 
 # -- TEST 4 :
-# verify you can use plotly and visualize plots in web browser locally
+# verify you can us
+# 
+# e plotly and visualize plots in web browser locally
 
 import plotly.io as pio            # to define input-output of plots
 pio.renderers.default = "browser"  # to render the plot locally in your default web browser
