@@ -42,7 +42,7 @@ def async_data(symbol, exchanges, data_type, execution='async', stop_criteria=No
         Criteria to stop the execution. Default behavior will be to stop after 1 minute of running.
 
         'min_count': int
-            Stops when all orderbooks have, at least, this number of registred timestamps.
+            Stops when all orderbooks have, at least, this number of regisetred timestamps.
 
         'target_timestamp': datetime
             Stops when its reached a specific timestamp.
@@ -233,10 +233,10 @@ def async_data(symbol, exchanges, data_type, execution='async', stop_criteria=No
 
 
 # Get public trades from the list of exchanges
-exchanges = ['binance']
-symbol = 'BTC/USDT'
+#exchanges = ['binance']
+#symbol = 'BTC/USDT'
 
 # Fetch realtime orderbook data until timer is out (60 secs is default)
-orderbooks = async_data(symbol=symbol, exchanges=exchanges, output_format='inplace', timestamp_format='timestamp',
-                        data_type='orderbooks', file_route='Files/OrderBooks', stop_criteria=None,
-                        elapsed_secs=10, verbose=2)
+# orderbooks = async_data(symbol=symbol, exchanges=exchanges, output_format='inplace', timestamp_format='timestamp',
+#                        data_type='orderbooks', file_route='Files/OrderBooks', stop_criteria=None,
+#                        elapsed_secs=10, verbose=2)
