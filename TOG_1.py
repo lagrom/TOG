@@ -73,11 +73,9 @@ display(orderbks)
 #display(orderbks.iloc[0:2, :])
 
 
-# First graph
+# df para calculos
 y = orderbks[['timestamp', 'bid_price', 'ask_price']]
-y = y.set_index('timestamp')
-y.plot(figsize=(15, 6))
-plt.show()
+
 
 y.head()
 
@@ -92,7 +90,7 @@ result = pd.merge(spread_bid,
                   spread_ask,
                   on='timestamp')
 result['spread'] = result['ask_price'] - result['bid_price']
-
+result
 #result = result.set_index('timestamp')
 
 # mid price
@@ -102,7 +100,7 @@ result['mid_price'] = (result['ask_price'] + result['bid_price'])/2
 result.head()
 
 
-# VWAP
+# VWAP Volume Weighted Average Price
 
 prep = orderbks
 prep['ask_mult'] = prep['ask_vol']*prep['ask_price']
@@ -126,3 +124,11 @@ result_vwap['vwap'] = (result_vwap['ask_mult'] +
                        result_vwap['bid_mult']) / result_vwap['vol_sum']
 
 result_vwap['vwap']
+
+
+# Graficas
+
+
+y = y.set_index('timestamp')
+y.plot(figsize=(15, 6))
+plt.show()
