@@ -1,10 +1,10 @@
 
-# -- Load base packages
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
 from codecs import ignore_errors
 import pandas as pd
 import numpy as np
 import data as dt
-import matplotlib.pyplot as plt
 import sys
 import plotly.graph_objects as go
 import chart_studio.plotly as py
@@ -131,4 +131,15 @@ result_vwap['vwap']
 
 y = y.set_index('timestamp')
 y.plot(figsize=(15, 6))
-plt.show()
+# plt.show()
+
+y.head()
+
+
+ts_data_load = y['bid_price']
+decomposition = sm.tsa.seasonal_decompose(
+    y['bid_price'], period=100, model='additive')
+
+fig = decomposition.plot()
+fig.show()
+# plt.close(fig)
