@@ -1,4 +1,3 @@
-
 # -- Load base packages
 import pandas as pd
 import numpy as np
@@ -172,12 +171,12 @@ def async_data(symbol, exchanges, data_type, execution='async', stop_criteria=No
                     # Store all dataframes as final result
                     r_data[client.id] = pd.DataFrame(dct_publictrades).T
 
+                    # Close client
+                    # await client.close()
+
                     # End time
                     time_2 = time.time()
                     time_f = round(time_2 - time_1, 4)
-
-                    # Close client
-                    # await client.close()
 
             # In case something bad happens with client
             except Exception as e:
@@ -240,3 +239,14 @@ def async_data(symbol, exchanges, data_type, execution='async', stop_criteria=No
 # orderbooks = async_data(symbol=symbol, exchanges=exchanges, output_format='inplace', timestamp_format='timestamp',
 #                        data_type='orderbooks', file_route='Files/OrderBooks', stop_criteria=None,
 #                        elapsed_secs=10, verbose=2)
+exchanges = ['binance']
+symbol = 'ETH/USDT'
+start = time.time()
+print(time.ctime(start))
+publictrades = async_data(symbol=symbol, exchanges=exchanges, output_format='inplace', timestamp_format='timestamp',
+                          data_type='publictrades', file_route='files/publictrades', stop_criteria=None,
+                          elapsed_secs=300, verbose=2)
+
+end = time.time()
+print(time.ctime(end))
+print(end - start)

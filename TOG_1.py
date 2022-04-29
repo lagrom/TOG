@@ -9,6 +9,7 @@ import sys
 import plotly.graph_objects as go
 import chart_studio.plotly as py
 from IPython.display import display
+import time
 
 #import nest_asyncio
 
@@ -18,17 +19,23 @@ from IPython.display import display
 
 # Get public trades from the list of exchanges
 exchanges = ['binance']
-symbol = 'BTC/USDT'
+symbol = 'ETH/USDT'
 
 # Fetch realtime orderbook data until timer is out (60 secs is default)
 orderbooks = dt.async_data(symbol=symbol, exchanges=exchanges, output_format='inplace', timestamp_format='timestamp',
                            data_type='orderbooks', file_route='Files/OrderBooks', stop_criteria=None,
-                           elapsed_secs=120, verbose=2)
+                           elapsed_secs=1800, verbose=2)
 
 # Fetch realtime orderbook data until timer is out (60 secs is default)
+start = time.time()
+print(time.ctime(start))
 publictrades = dt.async_data(symbol=symbol, exchanges=exchanges, output_format='inplace', timestamp_format='timestamp',
                              data_type='publictrades', file_route='files/publictrades', stop_criteria=None,
-                             elapsed_secs=10, verbose=2)
+                             elapsed_secs=1800, verbose=2)
+
+end = time.time()
+print(time.ctime(end))
+print(end - start)
 
 
 orderbks = pd.DataFrame()
@@ -40,37 +47,56 @@ for key in orderbooks['binance']:
     y = orderbooks['binance'][key]
     y['timestamp'] = key
     orderbks = orderbks.append(y, ignore_index=True)
-print(orderbks)
+# print(orderbks)
 
+orderbks.to_parquet('orderbook_30mins.parquet')
 
-# publictrds = pd.DataFrame()
+publictrds = pd.DataFrame()
 
-# for key in publictrades['binance']:
-#     print(key)
-#     print(publictrades['binance'][key])
-#     y = publictrades['binance'][key]
-#  #   y['key'] = key
-#     publictrds = publictrds.append(y)
+for key in publictrades['binance']:
+    print(key)
+    print(publictrades['binance'][key])
+    y = publictrades['binance'][key]
+    y['key'] = key
+    publictrds = publictrds.append(y, ignore_index=True)
+print(publictrds)
+
+publictrds = publictrds.transpose()
 # print(publictrds)
+publictrds.columns = publictrds.iloc[-1]
+publictrds = publictrds[:-1]
 
-# publictrds = publictrds.transpose()
-# print(publictrds)
+publictrds.to_parquet('public_trade_30mins.parquet')
+
+
+# Leyedo de los archivos
+
 
 # Indexando el orderbook
 orderbks.head()
+publictrds.head()
+
+publictrds.columns
 
 # orderbks.reset_index(drop=True)
 orderbks.info()
+publictrds.info()
+
 orderbks.shape
+publictrds.shape
 
-#orderbks['timestamp'].iloc[1] - orderbks['timestamp'].iloc[0]
+orderbks['timestamp'].iloc[-1] - orderbks['timestamp'].iloc[0]
 
+publictrds['key'].iloc[-1] - publictrds['key'].iloc[0]
 
 display(orderbks)
 
 # orderbks.dtypes
 
 #display(orderbks.iloc[0:2, :])
+
+orderbk_tests = pd.read_parquet('orderbook.parquet')
+orderbk_tests.shape
 
 
 # df para calculos
