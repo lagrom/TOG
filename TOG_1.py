@@ -24,7 +24,20 @@ symbol = 'ETH/USDT'
 # Fetch realtime orderbook data until timer is out (60 secs is default)
 orderbooks = dt.async_data(symbol=symbol, exchanges=exchanges, output_format='inplace', timestamp_format='timestamp',
                            data_type='orderbooks', file_route='Files/OrderBooks', stop_criteria=None,
-                           elapsed_secs=1800, verbose=2)
+                           elapsed_secs=3600, verbose=2)
+
+orderbks = pd.DataFrame()
+y = pd.DataFrame()
+
+for key in orderbooks['binance']:
+    print(key)
+    # print(type(orderbooks['binance'][key]))
+    y = orderbooks['binance'][key]
+    y['timestamp'] = key
+    orderbks = orderbks.append(y, ignore_index=True)
+
+
+orderbks.to_parquet('orderbook_1hour.parquet')
 
 # Fetch realtime orderbook data until timer is out (60 secs is default)
 start = time.time()
@@ -38,18 +51,8 @@ print(time.ctime(end))
 print(end - start)
 
 
-orderbks = pd.DataFrame()
-y = pd.DataFrame()
-
-for key in orderbooks['binance']:
-    print(key)
-    # print(type(orderbooks['binance'][key]))
-    y = orderbooks['binance'][key]
-    y['timestamp'] = key
-    orderbks = orderbks.append(y, ignore_index=True)
 # print(orderbks)
 
-orderbks.to_parquet('orderbook_30mins.parquet')
 
 publictrds = pd.DataFrame()
 
