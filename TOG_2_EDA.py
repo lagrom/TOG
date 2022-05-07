@@ -1,3 +1,4 @@
+from zlib import decompressobj
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import pandas as pd
@@ -13,6 +14,7 @@ from sklearn import datasets
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.graphics.tsaplots import plot_pacf, plot_acf
 from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.seasonal import seasonal_decompose
 
 
 orderbook = pd.read_parquet('orderbook_1hour.parquet')
@@ -202,3 +204,21 @@ plt.show()
 arima_model = ARIMA(orderbook1.Target, order=(2, 1, 3))
 model = arima_model.fit()
 print(model.summary())
+
+fig = model.plot_diagnostics(figsize=(10, 10))
+plt.show()
+
+
+# Plot residual errors
+residuals = pd.DataFrame(model.resid)
+fig, ax = plt.subplots(1, 2)
+residuals.plot(title="Residuales", ax=ax[0])
+residuals.plot(kind='kde', title='Densidad', ax=ax[1])
+plt.show()
+
+#
+# Simple multiplicative decomposition
+
+result = seasonal_decompose(residual, model='multiplactive', period=1)
+fig = result.plot()
+plt.show()
